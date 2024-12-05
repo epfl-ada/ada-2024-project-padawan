@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['GeistSans', 'sans-serif'], // Default font
+        pixel: ['"Press Start 2P"', 'cursive'], // Add the pixelated font
+      },
       colors: {
         background: '#0A0B0D',
         foreground: '#F2F3F5',
@@ -46,9 +50,11 @@ const config: Config = {
       },
       animation: {
         'fade-up': 'fade-up 0.5s ease-out forwards',
+         'bounce': 'bounce 2s infinite ease-in-out',
+          'move': 'move 2s infinite ease-in-out',
       },
     },
-  },
+  },  
   plugins: [require('tailwindcss-animate')],
 };
 
