@@ -7,6 +7,10 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    fontFamily: {
+      sans: ['GeistSans', 'sans-serif'],
+      pixel: ['"Press Start 2P"', 'cursive'],
+    },
     extend: {
       fontFamily: {
         sans: ['GeistSans', 'sans-serif'], // Default font

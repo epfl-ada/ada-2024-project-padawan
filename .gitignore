@@ -1,5 +1,6 @@
 # YouNiverse data folder
 data/youniverse/
+data/games_edges_all.csv
 
 # Python cache
 __pycache__/

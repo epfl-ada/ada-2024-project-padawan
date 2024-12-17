@@ -5,6 +5,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
+  transpilePackages: ['gsap'],
 };
 
 module.exports = nextConfig;
