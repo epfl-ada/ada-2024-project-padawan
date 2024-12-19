@@ -1,6 +1,8 @@
 import { HeroSection } from '@/components/hero-section';
 import GenresSection from '@/components/genres-section';
-import TournamentsSection from '@/components/tournaments-section';
+//import TournamentsSection from '@/components/tournaments-section';
+import BarChart  from '@/components/barchart-genres';
+import UploadGenres from '@/components/uploads-genres';
 import { TrendsSection } from '@/components/trends-section';
 import { CategorySection } from '@/components/category-section';
 import NetworkGraph from '@/components/network-graph';
@@ -12,7 +14,9 @@ export default function Home() {
             <div className="w-screen max-w-full">
                 <HeroSection />
                 <GenresSection />
-                <TournamentsSection />
+                {/* <TournamentsSection /> */}
+                <BarChart />
+                <UploadGenres />
                 <TrendsSection />
                 <CategorySection />
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" id="network">

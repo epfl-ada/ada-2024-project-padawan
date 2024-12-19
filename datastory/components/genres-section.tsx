@@ -2,9 +2,7 @@
 
 import { ResponsiveChordCanvas } from '@nivo/chord'
 import { AnimatedSection } from './animated-section';
-import data from '@/data/genre_data_all.json';
-
-
+import data from '@/data/genres_data.json';
 
 const GenresSection = () => {
     return (
