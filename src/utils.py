@@ -5,20 +5,20 @@ import polars as pl
 import matplotlib.pyplot as plt
 import string
 
-
-def segment_channel(df: pd.DataFrame, lower_bound: int, upper_bound: float) -> pd.DataFrame:
+def segment_channel(df: pd.DataFrame, lower_bound: int, upper_bound: float, column: str) -> pd.DataFrame:
     """
     Segment the channels based on the number of subscribers.
     
     Args:
-        df: pd.DataFrame - channels dataframe to segment, must contain a "subscribers" column
+        df: pd.DataFrame - channels dataframe to segment
         lower_bound: int - lower bound of the segment
         upper_bound: float - upper bound of the segment
+        column: str - column to segment
         
     Returns:
         pd.DataFrame - the segmented dataframe
     """
-    return df[(df["subscribers"] >= lower_bound) & (df["subscribers"] < upper_bound)]
+    return df[(df[column] >= lower_bound) & (df[column] < upper_bound)]
 
 
 def preprocess_name(name: str) -> str:
