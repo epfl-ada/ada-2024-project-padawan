@@ -1,5 +1,9 @@
 # The dynamics of gaming on YouTube : A story about games, events and communities 🎮
 
+## Datastory
+
+ Check out our datastory at [adaguleeer.ch](https://adaguleeer.ch/)
+
 ## Abstract
 
 We are presented with **YouNiverse**, A large-scale dataset about **channel** and **video metadata** from English-speaking **YouTube**. The dataset contains information about channels of different categories, time series of views and subscribers count, metadata of each crawled video as well as comment data across different videos. We created a datastorty centered on **gaming content** on YouTube through three major angles. We first investigated the **games** which generates the **most engagement** on the platform. Then, we observed the **influence** of **real-world events** in the gaming industry on the users' activity. Finally, we focused on the **dynamics** of different **video game communities** to explore how close they are and in what way they interact with each other. You can see our datastory [here](www.adaguleeer.ch) 
