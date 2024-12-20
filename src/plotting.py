@@ -10,7 +10,6 @@ import networkx as nx
 from src.timeseries import generate_views_for_channels, generate_views_for_game
 from wordcloud import WordCloud, STOPWORDS
 
-
 def plot_category_pie_chart(pie_values_df):
     # Extract categories and values
     categories = pie_values_df.index.tolist()

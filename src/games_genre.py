@@ -2,6 +2,7 @@ import polars as pl
 import pandas as pd
 import numpy as np
 
+
 def join_games_with_genres(games_df, with_game_df):
     """
     Converts games_df to a Polars DataFrame, lowercases the 'Title' column, and joins it with with_game_df.

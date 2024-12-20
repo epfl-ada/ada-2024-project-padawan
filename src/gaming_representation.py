@@ -1,6 +1,15 @@
 import pandas as pd
 
 def process_category_percentages(videos_metadata_df):
+    """
+    Process the category percentages in the videos_metadata_df DataFrame.
+
+    Args:
+        videos_metadata_df (pd.DataFrame): DataFrame containing video metadata.
+    
+    Returns:
+        pd.DataFrame: A DataFrame with the category percentages processed.
+    """
     # Calculate category percentages
     true_category_percentages_df = (
         videos_metadata_df["categories"]

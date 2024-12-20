@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import string
 from tqdm import tqdm
 
-
 def filter_and_sort_games_by_plays(games_df, cutoff=2000):
     """
     Converts 'Plays' to numeric, sorts games by play count, and limits the DataFrame to the top N rows.

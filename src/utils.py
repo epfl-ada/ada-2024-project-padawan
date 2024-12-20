@@ -5,7 +5,6 @@ import polars as pl
 import matplotlib.pyplot as plt
 import string
 
-
 def segment_channel(df: pd.DataFrame, lower_bound: int, upper_bound: float, column: str) -> pd.DataFrame:
     """
     Segment the channels based on the number of subscribers.

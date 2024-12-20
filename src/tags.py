@@ -3,10 +3,8 @@ import polars as pl
 def get_tags(videos_sample_df):
     """
     Processes the 'tags' column in the DataFrame and returns the tags and their counts.
-
     Args:
         videos_sample_df (pl.DataFrame): The DataFrame containing a 'tags' column.
-
     Returns:
         pl.DataFrame: A DataFrame with the tags and their counts.
     """

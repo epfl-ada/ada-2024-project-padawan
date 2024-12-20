@@ -1,7 +1,6 @@
 import polars as pl
 import pandas as pd
 
-
 def count_videos_per_game(with_game_df: pl.DataFrame) -> pl.DataFrame:
     """
     Function to count the number of videos per game.

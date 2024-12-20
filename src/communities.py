@@ -5,9 +5,6 @@ from tqdm import tqdm
 import networkx as nx
 import community as community_louvain
 
-
-import polars as pl
-
 def get_target_mapping(
     videos_df: pl.DataFrame, channels_df: pl.DataFrame, target_type: str
 ) -> dict:

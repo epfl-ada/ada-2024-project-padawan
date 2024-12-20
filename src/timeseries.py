@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import json
 import plotly.graph_objects as go
 
-
 def games_timeseries(channels_top_game_df: pl.DataFrame, timeseries_df: pl.DataFrame):
     """
     Compute the time series of views, subs and videos for each top game.
