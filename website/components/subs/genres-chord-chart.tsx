@@ -5,12 +5,12 @@ import data from '@/data/genres_data.json';
 
 export function GenresChordChart() {
     return (
-        <div className="relative">
-            <div className="w-full h-screen">
+        <div className="relative flex">
+            <div className="w-1/2 h-screen">
                 <ResponsiveChord
                     data={data.data}
                     keys={data.keys}
-                    margin={{ top: 170, right: 300, bottom: 170, left: 100 }}
+                    margin={{ top: 170, right: 80, bottom: 170, left: 100 }}
                     valueFormat=".2f"
                     padAngle={0.006}
                     innerRadiusRatio={0.86}
@@ -56,38 +56,11 @@ export function GenresChordChart() {
                         '#F8B7A0', // Light Red
                     ]
                     }
-                    legends={[
-                        {
-                            anchor: 'right',
-                            direction: 'column',
-                            justify: false,
-                            translateX: 40,
-                            translateY: 0,
-                            itemWidth: 120,
-                            itemHeight: 15,
-                            itemsSpacing: 0,
-                            itemTextColor: '#999',
-                            itemDirection: 'left-to-right',
-                            symbolSize: 12,
-                            effects: [
-                                {
-                                    on: 'hover',
-                                    style: {
-                                        itemTextColor: '#000'
-                                    }
-                                }
-                            ]
-                        }
-                    ]}
+
                     theme={{
                         labels: {
                             text: {
                                 fontSize: 16,
-                            },
-                        },
-                        legends: {
-                            text: {
-                                fontSize: 15,
                             },
                         },
                         tooltip: {
@@ -99,31 +72,26 @@ export function GenresChordChart() {
                         },
                     }}
                 />
-                <div className="absolute top-24 right-40 text-3xl text-white font-bold">
-                    Genres Chord Chart
-                </div>
             </div>
-            <div className="w-full text-center px-32 py-8 text-lg text-gray-300">
-                <p className="text-justify mb-4">
-                    Looking at the chord chart, we can observe that some genres regularly appear together, while others are rarely or never paired.
-                    This tells us about the potential connections between games and communities.
-                    For example, if you're passionate about Adventure games, you will often find that these games are linked to genres like RPG, Platform, or Shooter.
+            <div className="w-1/2 p-12 flex flex-col justify-center">
+                <div className="space-y-6 text-lg text-gray-300">
+                    <p className="text-justify text-3xl text-white font-bold mb-4">
+                        Genres Chord Chart
+                    </p>
+                    <p className="text-justify mb-4">
+                    Some genres regularly appear together, while others are rarely or never paired. 
+                    This tells us about the potential connections between games and communities. 
+                    For example, if you're passionate about Adventure games, you will often find that these games are linked to genres like RPG, Platform, or Shooter. 
                     Thus, as an Adventure gamer, you are likely to be part of a broad community that spans multiple genres, offering diverse experiences and interactions.
-                </p>
-                <p className="text-justify mb-4">
-                    On the other hand, genres like Sport, Card & Board Games, and MOBA tend to stay within their own circles.
-                    These genres are less likely to be paired with others, which means that players of these games may find themselves
-                    more isolated, focusing on their specific niche.
-                    MOBA (Multiplayer Online Battle Arena) genre, despite hosting massive games like League of Legends or Dota 2, illustrates an intriguing case.
-                    While these games still attract vast communities, their genre probably limits them compared to more frequent crossovers.
+                    </p>
+                    <p className="text-justify mb-4">
+                    On the contrary, genres like Sport or MOBA tend to stay within their own circles. 
+                    They are less likely to be paired with others, which means that players of these games may find themselves more isolated, focusing on their specific niche. 
+                    MOBA (Multiplayer Online Battle Arena) genre, despite hosting massive games like League of Legends or Dota 2, illustrates an intriguing case. 
+                    While these games still attract vast communities, their genre probably limits them compared to more frequent crossovers. 
                     This underscores how genre clustering can restrict a game’s reach.
-                </p>
-                <p className="text-justify mb-4">
-                    This chord chart reveals how your choice of game can shape the kind of community you belong to.
-                    Depending on the genre you prefer, you may find it easier to connect with other players from diverse backgrounds or, conversely, become more deeply immersed in a specific community.
-                    Feel free to review this chord chart further and see which genres align with your interests.
-                    This will give you an idea of whether you’re ready to expand your horizons or if you would rather stay within a closer circle.
-                </p>
+                    </p>
+                </div>
             </div>
         </div>
 

@@ -53,9 +53,9 @@ export function Tags() {
                 anticipatePin: 1
             }
         })
-            .to(slide, {
-                opacity: 0,
-            });
+        .to(slide, {
+            opacity: 0,
+        });
 
 
         return () => {
