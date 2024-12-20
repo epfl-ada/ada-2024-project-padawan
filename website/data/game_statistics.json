@@ -1,0 +1,88 @@
+{
+    "games": {
+        "call of duty": {
+            "stats": [
+                {
+                    "label": "Release Date",
+                    "value": "October 2003 - Now"
+                },
+                {
+                    "label": "Genre",
+                    "value": "Shooter"
+                },
+                {
+                    "label": "Studio",
+                    "value": "Activision"
+                },
+                {
+                    "label": "Dedication Rate",
+                    "value": "39.79%"
+                },
+                {
+                    "label": "Ratio likes/dislikes",
+                    "value": 25.27
+                },
+                {
+                    "label": "Posting Rate",
+                    "value": "5.43%"
+                }
+            ]
+        },
+        "fortnite": {
+            "stats": [
+                {
+                    "label": "Release Date",
+                    "value": "July 2017"
+                },
+                {
+                    "label": "Genre",
+                    "value": "Adventure"
+                },
+                {
+                    "label": "Studio",
+                    "value": "Epic Games"
+                },
+                {
+                    "label": "Dedication Rate",
+                    "value": "56.1%"
+                },
+                {
+                    "label": "Ratio likes/dislikes",
+                    "value": 23.16
+                },
+                {
+                    "label": "Posting Rate",
+                    "value": "5.51%"
+                }
+            ]
+        },
+        "minecraft": {
+            "stats": [
+                {
+                    "label": "Release Date",
+                    "value": "November 2011"
+                },
+                {
+                    "label": "Genre",
+                    "value": "Sandbox"
+                },
+                {
+                    "label": "Studio",
+                    "value": "Mojang"
+                },
+                {
+                    "label": "Dedication Rate",
+                    "value": "51.43%"
+                },
+                {
+                    "label": "Ratio likes/dislikes",
+                    "value": 31.46
+                },
+                {
+                    "label": "Posting Rate",
+                    "value": "11.24%"
+                }
+            ]
+        }
+    }
+}

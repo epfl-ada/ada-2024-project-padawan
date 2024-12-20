@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --tomato1: var(--tomato-1);
+  --tomato2: var(--tomato-2);
+  --tomato3: var(--tomato-3);
+  --tomato9: var(--tomato-9);
+  --tomato11: var(--tomato-11);
+  --tomato12: var(--tomato-12);
+  
+  --slate1: var(--slate-1);
+  --slate2: var(--slate-2);
+  --slate3: var(--slate-3);
+  --slate9: var(--slate-9);
+  --slate11: var(--slate-11);
+  --slate12: var(--slate-12);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.chart-container {
+  @apply relative h-[400px] w-full rounded-lg bg-card p-4;
+}
+
+.section-container {
+  @apply mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8;
+}

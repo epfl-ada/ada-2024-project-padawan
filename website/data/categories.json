@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Gaming",
+        "value": 18.81
+    },
+    {
+        "name": "Entertainment",
+        "value": 16.83
+    },
+    {
+        "name": "News & Politics",
+        "value": 12.18
+    },
+    {
+        "name": "Music",
+        "value": 11.39
+    },
+    {
+        "name": "People & Blogs",
+        "value": 9.48
+    },
+    {
+        "name": "Sports",
+        "value": 5.97
+    },
+    {
+        "name": "Howto & Style",
+        "value": 5.44
+    },
+    {
+        "name": "Education",
+        "value": 5.2
+    },
+    {
+        "name": "Science & Technology",
+        "value": 3.3
+    },
+    {
+        "name": "Film & Animation",
+        "value": 3.24
+    },
+    {
+        "name": "Autos & Vehicles",
+        "value": 3.09
+    },
+    {
+        "name": "Other",
+        "value": 5.07
+    }
+]
