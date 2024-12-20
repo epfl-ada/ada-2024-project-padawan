@@ -1,6 +1,6 @@
 {
     "title": {
-        "text": "Views Over Time"
+        "text": "FIFA Versions Views Over Time"
     },
     "xAxis": {
         "data": [
@@ -706,11 +706,11 @@
                 "data": [
                     [
                         {
-                            "name": "FIFA 14 release Start",
+                            "name": "FIFA 14 Release Start",
                             "xAxis": "2013-09-15"
                         },
                         {
-                            "name": "FIFA 14 release End",
+                            "name": "FIFA 14 Release End",
                             "xAxis": "2013-09-29"
                         }
                     ],

@@ -6,7 +6,7 @@ import { TopGames } from '@/components/sections/top-games';
 import { Genres } from '@/components/sections/genres';
 import { NetworkGraph } from '@/components/sections/network-graph';
 import { Navbar } from '@/components/sections/navbar';
-import { Markov } from '@/components/sections/markov';
+import { Summary } from '@/components/sections/summary';
 import { Tags } from '@/components/sections/tags';
 import { Events } from '@/components/sections/events';
 import { useState, useEffect } from 'react';
@@ -25,6 +25,7 @@ export default function Home() {
         { id: 'top-games', label: 'Top Games' },
         { id: 'events', label: 'Events' },
         { id: 'genres', label: 'Genres' },
+        { id: 'summary', label: 'Summary' },
         { id: 'network', label: 'Network' },
     ];
 
@@ -61,7 +62,7 @@ export default function Home() {
             <Section id="top-games"><TopGames /></Section>
             <Section id="events"><Events /></Section>
             <Section id="genres"><Genres /></Section>
-            <Section id="markov"><Markov /></Section>
+            <Section id="summary"><Summary /></Section>
             <Section id="network"><NetworkGraph /></Section>
         </>
     );

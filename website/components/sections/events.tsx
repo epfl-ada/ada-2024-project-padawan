@@ -3,11 +3,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useRef, useState } from 'react';
 import { TimeSeries } from '../subs/timeseries';
-import fifaTimeSeriesData from '@/data/fifa_14_to_18.json'
+import fifaTimeSeriesData from '@/data/views_fifa.json'
 import lolTimeSeriesData from '@/data/views_lol.json'
 import acTimeSeriesData from '@/data/views_ac.json'
 import { QuizTab } from '../subs/quiz-tab';
-import { ScrollDown } from '../subs/scroll-down';
+import { ChevronDownIcon } from '@radix-ui/themes';
 import { Button } from '@radix-ui/themes';
 import { ReloadIcon } from '@radix-ui/react-icons';
 
@@ -110,28 +110,23 @@ export function Events() {
                         {
                             showText &&
                             (
-                                <div className={`${quizCompleted ? 'animate-fadeIn' : 'animate-fadeOut'}`}>
-                                    <h1 className="font-bold text-xl border-l-2 pl-4" style={{ borderColor: '#E54D2E' }}>Impact of real-world events</h1>
-                                    <p className="text-justify text-lg">
-                                        One of the key ways gamers connect with their favourite communities and games is through their dynamics,
-                                        the excitement and new experiences that break the routine. How many promising games have we seen fail
-                                        because they lacked regular updates or a sense of evolution. A powerful tool for games to keep their
-                                        communities engaged is through real-life events, and when it comes to this, fresh releases are among
-                                        the most impactful.
+                                <div className={`${quizCompleted ? 'animate-fadeIn' : 'animate-fadeOut'} flex flex-col items-center space-y-5`}>
+                                    <p className="text-justify text-lg border-l-2 pl-4" style={{ borderColor: '#E54D2E' }}>
+                                        With a new release each year, FIFA is one of the most obvious examples
+                                        of this impact of new versions releases. Here's a nice visualization of 
+                                        this phenomenon, let's see how this translates into a concrete change in views. 
                                     </p>
-                                    <p className="text-justify text-lg">
-                                        Show us you are warmed-up with this new quizz!
-                                    </p>
+                                    <ChevronDownIcon 
+                                        className="w-8 h-8" 
+                                        aria-label="Scroll down"
+                                    />
                                 </div>
                             )
                         }
                         {
-                            showText && <ScrollDown />
-                        }
-                        {
                             showText &&
                             (
-                                <div className="absolute top-10 right-10">
+                                <div className="absolute top-10 left-10">
                                     <Button onClick={handleReset} size="3" variant="soft">
                                         <ReloadIcon />
                                     </Button>
@@ -140,20 +135,18 @@ export function Events() {
                         }
                     </div>
                 </div>
-                <div className="h-screen w-[300vw] flex justify-center">
+                <div className="h-screen w-[300vw] flex">
                     <TimeSeries data={fifaTimeSeriesData} />
                 </div>
                 <div className="h-screen w-[50vw] flex flex-col justify-center items-center mr-20">
-                    <h4 className="font-bold text-xl">Releases</h4>
-                    <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and scrambled it to make a type
-                        specimen book. It has survived not only five centuries, but also the leap into
-                        electronic typesetting, remaining essentially unchanged. It was popularised in the
-                        1960s with the release of Letraset sheets containing Lorem Ipsum passages, and
-                        more recently with desktop publishing software like Aldus PageMaker including
-                        versions of Lorem Ipsum.
+                    <p className="text-justify text-lg  border-b-2 pb-4" style={{ borderColor: '#E54D2E' }}>
+                        We observe that every new game of the franchise leads to a huge yearly views peak, while older
+                        versions tend to fade. This demonstrates that communities around a fast-evolving game keep loyal
+                        to the franchise while expecting regular updates.  
+                    </p>
+                    <p className="text-justify text-lg pt-4">
+                        Let's see if we can generalize this. Firstly, on another game with regular updates. Then,
+                        we'll try to catch the impact of e-sport tournaments rather than releases on the same metrics. 
                     </p>
                 </div>
                 <div className="h-screen w-[200vw] flex justify-center">
@@ -163,13 +156,19 @@ export function Events() {
                     <TimeSeries data={lolTimeSeriesData} />
                 </div>
                 <div className="h-screen w-[50vw] flex flex-col justify-center items-center">
-                    <h4 className="font-bold text-xl">Tournaments</h4>
-                    <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                        when an unknown printer took a galley of type and scrambled it to make a type
-                        specimen book. It has survived not only five centuries, but also the leap into
-                        electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    <p className="text-justify text-lg  border-b-2 pb-4" style={{ borderColor: '#E54D2E' }}>
+                        How interesting is this! The game with the most well-known tournaments, League of Legends, 
+                        shows the same peaks in views after those events than during our previous experiments. This 
+                        makes sense: much more than just competitions, esport tournaments act as celebrations of the
+                        gaming world. After all, what is more thrilling than watching the best of the best compete in 
+                        the game and atmosphere you love? These events gather people and represent the spirit of gaming
+                        communities.        
+                    </p>
+                    <p className="text-justify text-lg pt-4">
+                        Until now, we've pretty much focused on individual video games. What about taking a step back, and
+                        considering genres instead? Indeed, a genre describes the main gameplay mechanics and themes that
+                        define the game. The exciting part? Most games don’t fit perfectly into a single genre. Instead, 
+                        they often span multiple genres, allowing us to find interesting connections.
                     </p>
                 </div>
             </div>
