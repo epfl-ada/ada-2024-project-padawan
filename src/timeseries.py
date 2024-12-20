@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import json
 import plotly.graph_objects as go
 
+
 def games_timeseries(channels_top_game_df: pl.DataFrame, timeseries_df: pl.DataFrame):
     """
     Compute the time series of views, subs and videos for each top game.
@@ -29,44 +30,53 @@ def games_timeseries(channels_top_game_df: pl.DataFrame, timeseries_df: pl.DataF
     return games_timeseries_df
 
 
-def generate_views_for_channels(
+def generate_metric_for_channels(
     games_timeseries_df: pd.DataFrame,
     game_name: str,
+    metric: str = "views",
     period: str = "W",
     window: int = 4,
+    lower_cutoff: str = None,
 ) -> pd.DataFrame:
     """ "
-    Generates a time series DataFrame for periodic generaetd views of a specified game.
+    Generates a time series DataFrame for a specfied metric of a specified game.
         Args:
             games_timeseries_df (pd.DataFrame): The DataFrame containing the time series data for the games.
             game_name (str): The name of the game to plot.
             dates (list[tuple[str, str]]): A list of tuples containing the event name and date.
             period (str): The period to group the data by. Default is 'W' (weekly).
             window (int): The window size for the rolling average. Default is 4.
+            metric (str): The metric to plot. Default is 'views'.
         Returns:
             game_period (pd.DataFrame): The time series DataFrame for the views of the specified game.
     """
+
+    column_name = (
+        "delta_views"
+        if metric == "views"
+        else "delta_subs" if metric == "subs" else "delta_videos"
+    )
 
     game_df = games_timeseries_df.filter(pl.col("top_game") == game_name).to_pandas()
     game_df["datetime"] = pd.to_datetime(game_df["datetime"])
     game_df["period"] = game_df["datetime"].dt.to_period(period)
 
     # Aggregate views by
-    game_period = game_df.groupby("period").agg({"delta_views": "sum"}).reset_index()
+    game_period = game_df.groupby("period").agg({column_name: "sum"}).reset_index()
     game_period["period"] = game_period["period"].dt.to_timestamp()
 
-    # Filter for dates starting from 2016-10-01
-    game_period = game_period[game_period["period"] >= pd.Timestamp("2016-10-01")]
+    if lower_cutoff:
+        game_period = game_period[game_period["period"] >= pd.Timestamp(lower_cutoff)]
 
     game_period["view_count"] = (
-        game_period["delta_views"].rolling(window=window, center=False).mean()
+        game_period[column_name].rolling(window=window, center=False).mean()
     )
 
     return pd.DataFrame(game_period)
 
 
 def generate_views_for_game(
-    df: pl.DataFrame, game_name: str, period: str = "W", window: int = 3
+    df: pl.DataFrame, game_name: str, period: str = "W", window: int = 3, lower_cutoff: str = None
 ) -> pd.DataFrame:
     """
     Generate weekly aggregated view counts for a given video game.
@@ -87,99 +97,38 @@ def generate_views_for_game(
         .sum(numeric_only=True)["view_count"]  # Sum views per week
     )
     averaged_weekly_views = weekly_views.rolling(window=window, min_periods=1).mean()
+
+    if lower_cutoff:
+        averaged_weekly_views = averaged_weekly_views[averaged_weekly_views.index >= pd.Timestamp(lower_cutoff)]
     return pd.DataFrame(averaged_weekly_views)
 
 
-# --------------------------------------------- Exporting to JSON ---------------------------------------------
 
 
-def views_to_json(
-    df: pd.DataFrame,
-    game_name: str,
-    channel_views: bool = True,
-    dates: list[tuple[str, str]] = None,
-    period: str = "W",
-    window: int = 4,
-    output_file: str = "game_views.json",
-) -> None:
+def game_percentage(df: pl.DataFrame, channels: bool = False):
     """
-    Export game views data and event dates into a JSON format compatible with charting libraries.
-
+    Returns the percentage of videos games associated with channels or videos
     Args:
-        games_timeseries_df (pd.DataFrame): DataFrame containing game time series data.
-        game_name (str): Name of the game to process.
-        dates (list[tuple[str, str]]): List of event tuples (event_name, date).
-        period (str): Grouping period for time series. Default is 'W' (weekly).
-        window (int): Rolling average window size. Default is 4.
-        output_file (str): Output JSON file path. Default is 'game_views.json'.
+        df(pl.DataFrame): videos or channels dataframe
+        channels(bool): whether the dataframe is channels or videos
+    Returns:
+        with_game_counts(pl.DataFrame): the percentage of videos games associated with channels or videos
     """
-    if channel_views:
-        views = generate_views_for_channels(df, game_name, period, window)
-        x_axis_data = views["period"].dt.strftime("%Y-%m-%d").tolist()
 
-    else:
-        views = generate_views_for_game(df, game_name, period, window)
-        x_axis_data = views.index.strftime("%Y-%m-%d").tolist()
+    column_name = "top_game" if channels else "video_game"
+    with_game_counts = (
+        df.get_column(column_name)
+        .value_counts()
+        .sort("count", descending=True)
+        .head(10)
+    )
+    with_game_counts = with_game_counts.with_columns(
+        (100 * pl.col("count") / len(df)).alias("percentage")
+    )
 
-    y_axis_data = views["view_count"].fillna(0).tolist()
-
-    # Transform event dates into individual markArea data for highlighting regions
-    mark_area_data = []
-    if dates:
-        for event_name, date in dates:
-            event_date = pd.to_datetime(date)
-            start_date = min(
-                x_axis_data, key=lambda d: abs(pd.Timestamp(d) - (event_date - pd.Timedelta(weeks=1))))
-
-            end_date = min(
-                x_axis_data, key=lambda d: abs(pd.Timestamp(d) - (event_date + pd.Timedelta(weeks=1))))
-
-            
-            mark_area_data.append(
-                [
-                    {"name": f"{event_name} Start", "xAxis": start_date},
-                    {"name": f"{event_name} End", "xAxis": end_date},
-                ]
-            )
-
-    # Construct json
-    chart_json = json_format_views(game_name, x_axis_data, y_axis_data, mark_area_data)
-
-    with open(output_file, "w") as f:
-        json.dump(chart_json, f, indent=4)
+    with_game_counts = with_game_counts.with_columns(
+        pl.col("percentage").round(2)
+    ).drop("count")
+    return with_game_counts
 
 
-def json_format_views(
-    game_name: str,
-    x_axis_data: list[str],
-    y_axis_data: list[int],
-    mark_area_data: list[list[str]],
-) -> dict:
-    """ "
-    Formats the data for a line chart in JSON format.
-        Args:
-            game_name (str): The name of the game.
-            x_axis_data (list[str]): The x-axis data.
-            y_axis_data (list[int]): The y-axis data.
-            mark_area_data (list[list[str]]): The mark area data.
-        Returns:
-            chart_json (dict): The JSON formatted data for the line chart
-    """
-    chart_json = {
-        "title": {
-            "text": f"Views Generated by {game_name}",
-        },
-        "xAxis": {"data": x_axis_data},
-        "yAxis": {},
-        "series": [
-            {
-                "type": "line",
-                "data": y_axis_data,
-                "markArea": {
-                    "itemStyle": {"color": "rgba(255, 173, 177, 0.4)"},
-                    "data": mark_area_data,
-                },
-            }
-        ],
-    }
-    return chart_json

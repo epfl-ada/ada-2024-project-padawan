@@ -2,6 +2,7 @@ import pandas as pd
 import polars as pl
 import numpy as np
 import json
+from src.timeseries import generate_metric_for_channels, generate_views_for_game
 
 def export_all(
     pie_chart_data_df,
@@ -40,6 +41,7 @@ def export_all(
         games_positions (dict): A dictionary mapping games to their positions (coordinates).
         G_channels (networkx.Graph): The graph representing the channels network.
         channels_partition (dict): A dictionary mapping channels to their communities or categories.
+        channels_popularities (dict): A dictionary mapping channels to their popularities (e.g., views, likes).
         channels_positions (dict): A dictionary mapping channels to their positions (coordinates).
     
     """
@@ -144,8 +146,6 @@ def export_tags_to_json(tags_df, output_file="../website/data/word_cloud.json"):
 
     print(f"Tags export completed successfully to {output_file}.")
 
-
-### def export_weekly_views_json(channels_top_game_df, timeseries_df, games, cutoff="2017-01-01", output_file="weekly_delta_views.json"):
 
 """-------------------------------------Top 3 Games---------------------------------------"""
 
@@ -328,5 +328,157 @@ def export_network_json(G, positions, popularity, partition, output_path):
     print(f"Network JSON successfully exported to {output_path}")
 
 
-# Example usage:
-# export_network_json(G, positions, popularity, partition, node_type="game")
+
+"""-------------------------------------Time Series ------------------------------------- """
+
+def export_views_top_games_json(
+    df: pl.DataFrame,
+    game_names: str,
+    period: str = "W",
+    window: int = 3,
+    output_file="weekly_delta_views.json",
+):
+    """
+    Exports a JSON file containing delta_views for each week for a list of games and the corresponding time axis.
+
+    Args:
+        df (pl.DataFrame): DataFrame with 'channel_id' and 'top_game' columns.
+        games_names (list[str]): List of game names to filter and export.
+        period (str): Grouping period for time series. Default is 'W' (weekly).
+        window (int): Rolling average window size. Default is 3.
+        output_file (str): Name of the JSON file to export.
+
+    Returns:
+        None
+    """
+    result = {"weeks": None}  
+    # Loop through each game and collect delta_views
+    for game_name in game_names:
+        metric = generate_views_for_game(
+            df=df,
+            game_name=game_name,
+            period=period,
+            window=window,
+            
+        )
+        result[game_name] = metric["view_count"].astype(int).tolist()
+        result["weeks"] = metric.index.astype(str).tolist()
+    # Export to JSON
+    with open(output_file, "w") as f:
+        json.dump(result, f, indent=4)
+
+
+def metric_to_json(
+    df: pd.DataFrame,
+    game_names: list[str],
+    channel_views: bool = True,
+    dates: dict[str, list[tuple[str, str]]] = None,
+    period: str = "W",
+    window: int = 4,
+    metric: str = "views",
+    output_file: str = "games_metrics.json",
+    lower_cutoff: str = None,
+) -> None:
+    """
+    Export game metric data and event dates into a JSON format compatible with charting libraries.
+
+    Args:
+        df (pd.DataFrame): DataFrame containing game time series data.
+        game_names (list[str]): List of game names to process.
+        channel_views (bool): Whether to generate metrics for individual channels. Default is True.
+        dates (dict[str, list[tuple[str, str]]]): Dictionary with game names as keys and event tuples (event_name, date) as values.
+        period (str): Grouping period for time series. Default is 'W' (weekly).
+        window (int): Rolling average window size. Default is 4.
+        metric (str): The metric to plot. Default is 'views'.
+        output_file (str): Output JSON file path. Default is 'games_metrics.json'.
+        lower_cutoff (str): The lower cutoff date for the data. Default is None.
+    """
+    series_data = []
+    all_x_axis_data = []
+
+    for game_name in game_names:
+        if channel_views:
+            views = generate_metric_for_channels(
+                games_timeseries_df=df,
+                game_name=game_name,
+                period=period,
+                window=window,
+                metric=metric,
+                lower_cutoff=lower_cutoff
+            )
+            x_axis_data = views["period"].dt.strftime("%Y-%m-%d").tolist()
+        else:
+            views = generate_views_for_game(df, game_name, period, window, lower_cutoff)
+            x_axis_data = views.index.strftime("%Y-%m-%d").tolist()
+
+        all_x_axis_data.append(x_axis_data)
+        y_axis_data = views["view_count"].fillna(0).tolist()
+
+        # Save the series data temporarily
+        series_data.append((game_name, x_axis_data, y_axis_data))
+
+    # Find the earliest start date
+    earliest_date = min(min(pd.to_datetime(axis)) for axis in all_x_axis_data)
+
+    # Calculate offsets and adjust data
+    final_x_axis = pd.date_range(
+        start=earliest_date,
+        end=max(max(pd.to_datetime(axis)) for axis in all_x_axis_data),
+        freq=period,
+    ).strftime("%Y-%m-%d").tolist()
+
+    aligned_series_data = []
+    for game_name, x_axis_data, y_axis_data in series_data:
+        offset = (pd.to_datetime(x_axis_data[0]) - earliest_date).days // 7  # Offset in weeks
+        aligned_y_axis = [0] * offset + y_axis_data
+        aligned_y_axis += [0] * (len(final_x_axis) - len(aligned_y_axis))
+        aligned_series_data.append(
+            {
+                "name": game_name,
+                "type": "line",
+                "data": aligned_y_axis,
+            }
+        )
+
+    # Add markArea data if event dates are provided
+    mark_area_data = {}
+    if dates:
+        data = []
+        for event_name, date in dates:
+            event_date = pd.to_datetime(date)
+            start_date = min(
+                final_x_axis,
+                key=lambda d: abs(
+                    pd.Timestamp(d) - (event_date - pd.Timedelta(weeks=1))
+                ),
+            )
+            end_date = min(
+                final_x_axis,
+                key=lambda d: abs(
+                    pd.Timestamp(d) - (event_date + pd.Timedelta(weeks=1))
+                ),
+            )
+            data.append(
+                [
+                    {"name": f"{event_name} Start", "xAxis": start_date},
+                    {"name": f"{event_name} End", "xAxis": end_date},
+                ]
+            )
+        mark_area_data["data"] = data
+
+    mark_area_data["itemStyle"] = {"color": "rgba(255, 173, 177, 0.4)"}
+
+    # Assign the markArea data to each series
+    for series in aligned_series_data:
+        series["markArea"] = mark_area_data
+
+    # Prepare the final JSON structure
+    chart_json = {
+        "title": {"text": f"{metric.capitalize()} Over Time of {', '.join([name.title() for name in game_names])}"},
+        "xAxis": {"data": final_x_axis},
+        "series": aligned_series_data,
+    }
+
+    # Write to the output file
+    with open("../website/data/" + output_file, "w") as f:
+        json.dump(chart_json, f, indent=4)
